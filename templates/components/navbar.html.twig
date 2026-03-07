@@ -1,39 +1,50 @@
 <nav class="navbar navbar-expand-lg fs-4 text">
   <div class="container-fluid">
-    <a class="navbar-brand" href="{{ path('app_events_index') }}">
-    <img style="height: 5rem;" src="{{ asset('images/logo.svg')}}" alt="">
-    </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse text-light fs-5" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link active text-light fs-5" aria-current="page" href="{{ path('app_events_index') }}">EVENTS</a>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle text-light fs-5" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            CATEGORIES
-          </a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" data-turbo="false" href="{{ path('app_events_filter', {'category': 'concert'} )}}">Concerts</a></li>
-            <li><a class="dropdown-item" data-turbo="false" href="{{ path('app_events_filter', {'category': 'party'} )}}">Party</a></li>
-            <li><a class="dropdown-item" data-turbo="false" href="{{ path('app_events_filter', {'category': 'festival'} )}}">Festivals</a></li>
-            <li><a class="dropdown-item" data-turbo="false" href="{{ path('app_events_filter', {'category': 'performing-arts'} )}}">Performing Arts</a></li>
-            <li><a class="dropdown-item" data-turbo="false" href="{{ path('app_events_filter', {'category': 'food-and-drink'} )}}">Food & Drink</a></li>
-          </ul>
-        </li>
-        
-            <a class="myButton" style="margin-left: 1rem" href="{{ path('app_events_new') }}">Create Event</a>
-       
-        
-            
-        
-      </ul>
-      <form class="d-flex" role="search">
-        <input class="form-control me-2" type="search" placeholder="Search for..." aria-label="Search">
-        <button class="btn btn-outline-light" type="submit">Search</button>
-      </form>
-    </div>
+    <div class="row w-100 align-items-center gy-2">
+
+      <!-- Logo -->
+      <div class="col-12 col-lg-4 col-md-6 text-md-start">
+        <a class="navbar-brand" data-turbo="false" href="{{ path('app_events_index') }}">
+        <img style="height: 5rem;" src="{{ asset('images/logo.svg')}}" alt="">
+        </a>
+      </div>
+
+
+      <!-- Nav items -->
+      <div class="col-12 col-lg-4 col-md-6">
+        <ul class="navbar-nav flex-row justify-content-center justify-content-md-end justify-content-lg-center gap-2 gap-md-3 align-items-center">
+          <li class="nav-item">
+            <a class="nav-link active text-light fs-5" data-turbo="false" aria-current="page" href="{{ path('app_events_index') }}">EVENTS</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle text-light fs-5" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              CATEGORIES
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" data-turbo="false" href="{{ path('app_events_filter', {'category': 'concert'} )}}">Concerts</a></li>
+              <li><a class="dropdown-item" data-turbo="false" href="{{ path('app_events_filter', {'category': 'party'} )}}">Party</a></li>
+              <li><a class="dropdown-item" data-turbo="false" href="{{ path('app_events_filter', {'category': 'festival'} )}}">Festivals</a></li>
+              <li><a class="dropdown-item" data-turbo="false" href="{{ path('app_events_filter', {'category': 'performing-arts'} )}}">Performing Arts</a></li>
+              <li><a class="dropdown-item" data-turbo="false" href="{{ path('app_events_filter', {'category': 'food-and-drink'} )}}">Food & Drink</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a class="myButton text-nowrap" data-turbo="false" href="{{ path('app_events_new') }}">
+              <span class="d-none d-xl-inline">Create Event</span>
+              <i class='bx bx-plus d-xl-none'></i>
+            </a>
+          </li>  
+        </ul>
+      </div>
+
+      <!-- Search -->
+      <div class="col-12 col-lg-4 col-md-12">
+        <form class="d-flex" role="search">
+          <input class="form-control me-2" type="search" placeholder="Search for..." aria-label="Search">
+          <button class="btn btn-outline-light" type="submit">Search</button>
+        </form>
+      </div>
+ 
+   </div>
   </div>
 </nav>
