@@ -1,0 +1,278 @@
+body {
+    background: linear-gradient(#272727, #737373);
+    min-height: 100vh;
+        
+}
+
+/* NAVBAR ADAPT */
+.navbar-toggler {
+    background-color: #fcf5fa !important;
+}
+
+.navbar-toggler-icon {
+    background-image: none;
+    width: 24px;
+    height: 24px;
+    border: 1px solid #fcf5fa;
+}
+
+.navbar-toggler-icon::before {
+    content: '';
+    display: block;
+    width: 24px;
+    height: 2px;
+    background-color: #fcf5fa;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+}
+
+.navbar-toggler-icon::after {
+    content: '';
+    display: block;
+    width: 24px;
+    height: 2px;
+    background-color: #fcf5fa;
+    position: absolute;
+    top: calc(50% + 6px);
+    left: 0;
+}
+
+.navbar-toggler.collapsed .navbar-toggler-icon::before {
+    transform: translateY(-6px) rotate(45deg);
+}
+
+.navbar-toggler.collapsed .navbar-toggler-icon::after {
+    transform: translateY(-6px) rotate(-45deg);
+}
+
+
+/* myGRID & myCARDS */
+.myGrid {
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    padding: 1.5rem;
+    min-height:calc(100vh - 165px);
+}
+
+
+.myCard{
+    height: 45vh;
+    min-width: 0;
+    border-image: 1 fill linear-gradient( rgba(255, 255, 255, 0.042),rgba(36, 37, 37, 0.8), rgba(36, 37, 42, 1));
+    background-position: center;
+    background-size: cover;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    padding: 1rem; 
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    font-size: 1.3rem;
+}
+
+.myCard:hover{
+    transform: scale(1.05); 
+    box-shadow: 0 4px 8px rgba(0, 0, 0.5, 0.5);   
+    transition: transform 0.3s ease, box-shadow 0.3s ease; 
+}
+
+.myCardTitle{
+    color: #ff19be;
+    font-size: 1.5rem; 
+    text-align: left; 
+}
+
+.myCardContent{
+    color: #ff19be;
+     p{
+        margin: 0;
+     }
+
+    span {
+        color: #fcf5fa;
+    }
+}
+
+.myCardBotones {
+    gap: 1rem;
+    margin: 0px;
+    display: flex;
+    justify-content: start;
+    width: 100%;
+    flex-wrap: wrap;
+    
+
+    button{
+        flex: 1;
+        padding: 0.2rem 0.2rem;  
+        min-width: fit-content;     
+    }
+        
+}
+
+@media (max-width: 600px) {
+    .myGrid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (min-width: 601px) and (max-width: 1024px) {
+    .myGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1025px) {
+    .myGrid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (min-width: 1441px) {
+    .myGrid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* myFORM */
+.myForm{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+    
+}
+
+.formContainer {
+    width: 85%; 
+    background: rgba(255, 255, 255, 0.047); 
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(15px);
+    color: #fcf5fa;
+    border-radius: 10px;
+    padding: 30px 30px;
+    height: auto;
+    justify-content: center;
+    
+    .input-box{
+        margin-bottom: .75rem;
+        width: 100%;
+        height: auto;
+        min-height: 3rem;
+        border-radius: 10px;
+        background: #fcf5fa0f;
+        color: #fcf5fa;
+        font-size: 20px;
+    }
+}
+
+/* myButton */
+.myButton{
+    padding: 4px 15px;
+    background-color: #ff19be;
+    color: #fcf5fa;
+    border: 3px solid #24252a00;
+    border-radius: 50px;
+    min-width: fit-content;
+    cursor: pointer;
+    transition: all 0.3s ease 0s;
+    margin-top: 0.3rem;
+    margin-bottom: 0.3rem;
+    text-decoration: none;
+}
+
+.myButton:hover{
+    background-color: #ff19be;
+    border: 3px solid white;
+}
+
+/* myDETAILS */
+.details{
+    width: 100%;
+    height: 90vh;
+    border-image: 1 fill linear-gradient( rgba(255, 255, 255, 0.001), rgba(255, 255, 255, 0.002),rgba(36, 37, 37, 0.8), rgba(36, 37, 42, 1));
+    background-size: cover;
+    background-position: center;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    overflow: hidden;
+    padding: 1rem; 
+    font-size: 20px;
+    p{
+        margin: 0;
+     }
+   
+}
+
+.event-name{
+    color: #ff19be;
+    font-size: 1.5rem; 
+    text-align: left; 
+}
+
+.details-content{
+    color: #ff19be;
+    margin-bottom: 0.5rem;
+    i {
+        font-size: 1.7rem;
+    }
+    span {
+        color: #fcf5fa;
+    }
+    a {
+        color: #ff19be;
+        text-decoration: none;
+    }
+}
+
+.detailsBotones {
+    display: flex;
+    justify-content: space-around;
+    flex-direction: row;
+    width: fit-content;    
+    gap: 1rem;    
+}
+
+
+
+/* FOOTER */
+.myFooter {
+    background-color: #737373;
+    padding: 0.5rem;
+  }
+  .myFooter div {
+    color: white;
+    text-align: center;
+    font-size: 20px;
+    text-decoration: none;
+
+    a{
+        color: #fcf5fa;
+        transition: 0.5s;
+        text-decoration: none;
+    }
+
+    a:hover{
+        color: #ff19be;
+        font-weight: 400;
+        transition: 0.5s;
+    }
+
+    i{
+        font-size: 20px;
+    }
+  }
+
+  .myFooter .myFooterNav {
+    display: flex;
+    justify-content: center;
+    font-size: 25px;
+    gap: 3rem;
+  }
+

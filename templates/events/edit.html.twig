@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Event
+{% endblock %}
+
+{% block body %}
+
+	{% include 'components/navbar.html.twig' %}
+
+	<div class="myForm">
+		<div class="formContainer">
+			<h1 style="text-align: center;">EDIT EVENT</h1>		
+							
+			{{ include('events/_form.html.twig', {'button_label': 'Update'}) }}
+			<a class="myButton" href="{{ path('app_events_index') }}"><i class='bx bx-arrow-back'></i> Back</a>
+			{{ include('events/_delete_form.html.twig') }}
+
+		</div>
+	</div>
+
+	{% include 'components/footer.html.twig' %}
+
+{% endblock %}

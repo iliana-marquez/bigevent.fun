@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}All Events
+{% endblock %}
+
+
+{% block body %}
+
+	{% include 'components/navbar.html.twig' %}
+
+	<h1 style="color: #ff19be; text-align: center;">ALL EVENTS</h1>
+    
+    <div class="myGrid">
+
+	{% for event in events %}
+
+		
+
+			<div class='myCard' style='background-image: url("{{ event.image }}");'>
+				<div class='myCardTitle'>
+					<h1>{{ event.name }}</h1>
+				</div>
+				<div class='myCardContent'>
+					<p><i class='bx bx-calendar'></i>
+						
+						<span>{{ event.dateTime ? event.dateTime|date('Y-m-d H:i:s') : '' }}</span>
+					</p>
+					<p><i class='bx bxs-map'></i>
+						<span>{{ event.city }},
+							{{ event.country }}</span>
+					</p>
+					<p><i class='bx bxs-category' ></i>
+							<span>{{ event.category }}</span>
+						</p>
+					</p>
+				</div>
+				<div class='myCardBotones'>
+					
+						<a class="myButton" href="{{ path('app_events_show', {'id': event.id}) }}">Details</a>
+						<a class="myButton" href="{{ path('app_events_edit', {'id': event.id}) }}">Update</a>
+					
+				</div>
+			</div>
+		
+
+	{% else %}
+		<h5 style="color: #fcf5fa;">No records found...</h5>
+	{% endfor %}
+
+	</div>
+
+{% include 'components/footer.html.twig' %}
+{% endblock %}

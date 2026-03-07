@@ -1,0 +1,15 @@
+# Environment files
+.env.local
+.env.*.local
+.env
+compose.override.yaml
+compose.yaml
+
+# Vendor and cache
+/vendor/
+var/cache/
+var/log/
+
+# IDEs
+.idea/
+.vscode/
