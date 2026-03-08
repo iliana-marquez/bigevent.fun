@@ -1,6 +1,9 @@
 body {
     background: linear-gradient(#272727, #737373) !important;
     min-height: 100vh;
+}
+
+.shadow {
     text-shadow:
     0 2px 4px rgba(0,0,0,0.8),
     0 0 10px rgba(0,0,0,0.6),
@@ -176,7 +179,6 @@ body {
     p{
         margin: 0;
      }
-   
 }
 
 .event-name{
