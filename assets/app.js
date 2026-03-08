@@ -9,16 +9,7 @@ import './styles/app.css';
 
 console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
 
-
-// Re-initialize Bootstrap dropdowns
-function initDropdowns() {
-    const dropdowns = document.querySelectorAll('[data-bs-toggle="dropdown"]');
-    dropdowns.forEach(dropdown => {
-        new bootstrap.Dropdown(dropdown);
-    });
-}
-
-// Initialize search on both regular load and Turbo navigation
+// Universal search 
 function initSearch() {
     const searchForm = document.querySelector('form[role="search"]');
     const searchInput = document.querySelector('input[type="search"]');
@@ -27,19 +18,26 @@ function initSearch() {
 
     if (!searchForm || !searchInput) return;
     
-    // Remove old listeners by cloning
-    const newForm = searchForm.cloneNode(true);
-    searchForm.parentNode.replaceChild(newForm, searchForm);
-    const newInput = newForm.querySelector('input[type="search"]');
+    // Populate url if redirected
+    const urlParams = new URLSearchParams(window.location.search);
+    const queryParam = urlParams.get('q');
+    if (queryParam) {
+        searchInput.value = queryParam;
+        // Auto-execute search if we have a query param
+        if (eventsGrid) {
+            performSearch (queryParam)
+        }
+    }
 
-    newForm.addEventListener('submit', function(e) {
+    searchForm.addEventListener('submit', function(e) {
         e.preventDefault();
-        performSearch(newInput.value);
+        performSearch(searchInput.value);
     });
+
 
     // Live seach as user types (300ms delay)
     let timeout;
-    newInput.addEventListener('input', function () {
+    searchInput.addEventListener('input', function () {
         clearTimeout(timeout);
         timeout = setTimeout(() => {
             performSearch(this.value);
@@ -63,7 +61,6 @@ function initSearch() {
                         ? `"${query}" SEARCH RESULTS`
                         : 'ALL EVENTS';
                 }
-                initDropdowns();    
             })
             .catch(error => {
                 console.error('Search error:', error);
@@ -72,5 +69,3 @@ function initSearch() {
 }
 
 document.addEventListener('DOMContentLoaded', initSearch);
-document.addEventListener('turbo:load', initSearch);
-document.addEventListener('turbo:load', initDropdowns);
