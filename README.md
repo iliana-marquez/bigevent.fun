@@ -331,7 +331,7 @@ AJAX search updates #events-grid directly. But detail/edit/create pages don't ha
 - Fix: Check for grid, redirect if missing:
 
 ````javascript
-jsfunction performSearch(query) {
+function performSearch(query) {
     if (!eventsGrid) {
         // No grid on this page → redirect to index with query
         window.location.href = `/events/?q=${encodeURIComponent(query)}`;
@@ -349,7 +349,7 @@ jsfunction performSearch(query) {
 
 **Issue 3:** Redirect Cleared Search Input, No Results Shown
 
-Redirecting to `/events/?q=adele` worked, but page loaded with empty input and "ALL EVENTS" — user had to type again.
+Redirecting to `/events/?q=adele` worked, but page loaded with empty input and "ALL EVENTS" and the user had to type again.
 - Symptom: URL showed ?q=adele but results weren't displayed.
 - Fix: Read URL param on load, populate input, auto-execute search:
 ```javascript
