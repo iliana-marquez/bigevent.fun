@@ -317,6 +317,49 @@ Understanding one framework makes it **much easier to learn the other**.
 
 ---
 
-# Author
+Takeaway: Turbo + Search Debugging
 
-Iliana Márquez
+Issue 1: Bootstrap Dropdowns Break After Navigation
+Context: Symfony 6.3+ bundles Turbo by default. Turbo intercepts clicks and swaps <body> via AJAX for SPA-like speed. But Bootstrap initializes components on DOMContentLoaded, which only fires once AND not after Turbo swaps content.
+
+- Symptom: Dropdown works on first load, breaks after clicking any link.
+- Fix: Disable Turbo globally (appropriate for simple Bootstrap projects):
+```
+html<body data-turbo="false">
+```
+Alternative for complex apps: Use turbo:load event or Stimulus controllers to re-initialize Bootstrap.
+
+Issue 2: Search Only Worked on Index Page
+Context: AJAX search updates #events-grid directly. But detail/edit/create pages don't have that element — the search bar sits in the navbar (via base.html.twig) but has nowhere to render results.
+- Symptom: Typing in search on details page did nothing.
+- Fix: Check for grid, redirect if missing:
+jsfunction performSearch(query) {
+````
+    if (!eventsGrid) {
+        // No grid on this page → redirect to index with query
+        window.location.href = `/events/?q=${encodeURIComponent(query)}`;
+        return;
+    }
+    
+    // Grid exists → AJAX update
+    fetch(`/events/search?q=${encodeURIComponent(query)}`)
+        .then(response => response.text())
+        .then(html => {
+            eventsGrid.innerHTML = html;
+        });
+}
+````
+
+Issue 3: Redirect Cleared Search Input, No Results Shown
+Context: Redirecting to /events/?q=adele worked, but page loaded with empty input and "ALL EVENTS" — user had to type again.
+- Symptom: URL showed ?q=adele but results weren't displayed.
+- Fix: Read URL param on load, populate input, auto-execute search:
+```
+jsconst queryParam = new URLSearchParams(window.location.search).get('q');
+if (queryParam) {
+    searchInput.value = queryParam;
+    if (eventsGrid) {
+        performSearch(queryParam);
+    }
+}
+````
