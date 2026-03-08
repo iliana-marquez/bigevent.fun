@@ -592,4 +592,4 @@ rm public/debug.php public/test.php
 3. **Always cache:clear --env=prod** after changes. Most "broken" deployments are cache issues.
 4. **Symlinks bridge conventions:** When framework expects X and host expects Y, symlink them.
 5. **Debug systematically:**  Test database, test routes, check logs, create debug file. Isolate the problem.
-6. **Production = --no-dev** -> Don't install dev dependencies. DebugBundle broke my prod because dev bundles weren't installed.
+6. **composer install --no-dev | `APP_ENV=prod` always on server** — Unlike Django's `DEBUG=False` (just a flag), Symfony's `APP_ENV=dev` loads extra bundles. If they're not installed (`--no-dev`), it crashes. Debug via logs and CLI instead.
