@@ -42,6 +42,21 @@ class EventsController extends AbstractController
         ]);
     }
 
+    #[Route('/search', name: 'app_events_search', methods: ['GET'])]
+    public function search(Request $request, EventsRepository $eventsRepository): Response
+    {
+
+        $query = $request->query->get('q', ' ');
+       
+        $events = $query
+            ? $eventsRepository->searchByName($query)
+            : $eventsRepository->findAll();
+
+        return $this->render('events/_event_grid.html.twig', [
+            'events' => $events,
+        ]);
+    }
+    
     #[Route('/{id}', name: 'app_events_show', methods: ['GET'])]
     public function show(Events $event): Response
     {
@@ -88,23 +103,10 @@ class EventsController extends AbstractController
 
         $events = $eventsRepository->findByCategory($category);
 
-        return $this->render('events/filter.html.twig', [
+        return $this->render('events/index.html.twig', [
             'events' => $events,
             'category' => $category,
         ]);
     }
 
-    #[Route('/search/{events}', name: 'app_events_search', methods: ['GET'])]
-    public function searchEvent(EventsRepository $eventsRepository, $category ): Response
-    {
-
-        $category = str_replace('-', ' ', $category);
-       
-        $events = $eventsRepository->findByCategory($category);
-
-        return $this->render('events/filter.html.twig', [
-            'events' => $events,
-            'category' => $category,
-        ]);
-    }
 }
