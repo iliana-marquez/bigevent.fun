@@ -437,8 +437,8 @@ DATABASE_URL="mysql://user:password@localhost:3306/database_name"
 
 ## .htaccess: Apache URL Routing
 Symfony uses a single entry point (index.php). Apache needs instructions:
-```
-Apache<IfModule mod_rewrite.c>
+```Apache
+<IfModule mod_rewrite.c>
     RewriteEngine On
     
     # Redirect homepage to /events/
