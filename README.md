@@ -585,11 +585,11 @@ rm public/debug.php public/test.php
 | Logs | `heroku logs --tail` | `cat var/log/prod.log` |
 | Process file | `Procfile` | `.htaccess` |
 
-##  Summary
+## Deployment Summary
 
-1. SSH unlocks everything — No more FTP dragging. Git + SSH = professional workflow.
-2. Environment separation — .env for defaults, .env.local for secrets. Never commit secrets.
-3. Always cache:clear --env=prod after changes. Most "broken" deployments are cache issues.
-4. Symlinks bridge conventions — When framework expects X and host expects Y, symlink them.
-5. Debug systematically — Test database, test routes, check logs, create debug file. Isolate the problem.
-6. Production = --no-dev — Don't install dev dependencies. DebugBundle broke my prod because dev bundles weren't installed.
+1. **SSH unlocks everything:** No more FTP dragging. Git + SSH = professional workflow.
+2. **Environment separation:** .env for defaults, .env.local for secrets. Never commit secrets.
+3. **Always cache:clear --env=prod** after changes. Most "broken" deployments are cache issues.
+4. **Symlinks bridge conventions:** When framework expects X and host expects Y, symlink them.
+5. **Debug systematically:**  Test database, test routes, check logs, create debug file. Isolate the problem.
+6. **Production = --no-dev** -> Don't install dev dependencies. DebugBundle broke my prod because dev bundles weren't installed.
