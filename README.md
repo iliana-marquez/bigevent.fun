@@ -56,7 +56,7 @@ Symfony uses **MVC** while Django uses **MTV**, but they map almost 1:1.
 | Twig Template  | Template | Renders HTML UI               |
 | Routes         | URLs     | Connect URL → controller/view |
 
-Example mapping:
+Example flow:
 
 ```
 Symfony
@@ -314,22 +314,24 @@ Understanding one framework makes it **much easier to learn the other**.
 
 ## 1. Turbo + Search Debugging
 
-Issue 1: Bootstrap Dropdowns Break After Navigation
+**Issue 1:** Bootstrap Dropdowns Break After Navigation
 Context: Symfony 6.3+ bundles Turbo by default. Turbo intercepts clicks and swaps <body> via AJAX for SPA-like speed. But Bootstrap initializes components on DOMContentLoaded, which only fires once AND not after Turbo swaps content.
 
 - Symptom: Dropdown works on first load, breaks after clicking any link.
 - Fix: Disable Turbo globally (appropriate for simple Bootstrap projects):
-```
-html<body data-turbo="false">
+```html
+<body data-turbo="false">
 ```
 Alternative for complex apps: Use turbo:load event or Stimulus controllers to re-initialize Bootstrap.
 
-Issue 2: Search Only Worked on Index Page
-Context: AJAX search updates #events-grid directly. But detail/edit/create pages don't have that element — the search bar sits in the navbar (via base.html.twig) but has nowhere to render results.
+**Issue 2:** Search Only Worked on Index Page
+
+AJAX search updates #events-grid directly. But detail/edit/create pages don't have that element, the search bar sits in the navbar (via base.html.twig) but has nowhere to render results.
 - Symptom: Typing in search on details page did nothing.
 - Fix: Check for grid, redirect if missing:
+
+````javascript
 jsfunction performSearch(query) {
-````
     if (!eventsGrid) {
         // No grid on this page → redirect to index with query
         window.location.href = `/events/?q=${encodeURIComponent(query)}`;
@@ -345,19 +347,21 @@ jsfunction performSearch(query) {
 }
 ````
 
-Issue 3: Redirect Cleared Search Input, No Results Shown
-Context: Redirecting to /events/?q=adele worked, but page loaded with empty input and "ALL EVENTS" — user had to type again.
+**Issue 3:** Redirect Cleared Search Input, No Results Shown
+
+Redirecting to `/events/?q=adele` worked, but page loaded with empty input and "ALL EVENTS" — user had to type again.
 - Symptom: URL showed ?q=adele but results weren't displayed.
 - Fix: Read URL param on load, populate input, auto-execute search:
-```
-jsconst queryParam = new URLSearchParams(window.location.search).get('q');
+```javascript
+const queryParam = new URLSearchParams(window.location.search).get('q');
+
 if (queryParam) {
     searchInput.value = queryParam;
     if (eventsGrid) {
         performSearch(queryParam);
     }
 }
-````
+```
 
 ## 2. Deployment
 
@@ -369,7 +373,7 @@ Before (slow):
 
 
 After (fast):
-```
+```bash
 # Local: commit and push
 Local: commit and push
 git add .
@@ -385,8 +389,8 @@ php bin/console cache:clear --env=prod
 ```
 
 Key commands:
-```
-bashssh -p 65002 username@domain.com  # Connect
+```bash
+ssh -p 65002 username@domain.com  # Connect
 pwd                                   # Where am I?
 ls -la                                # What's here?
 cd ~/domains/bigevent.fun            # Navigate
@@ -417,11 +421,11 @@ APP_ENV=prod
 ```
 
 **Your `.env.local` (server only):**
-```
+```bash
 APP_ENV=prod
 APP_SECRET=your_32_char_secret
 DATABASE_URL="mysql://user:password@localhost:3306/database_name"
-````
+```
 
 ### Hostinger vs Heroku: 
 
@@ -431,7 +435,7 @@ DATABASE_URL="mysql://user:password@localhost:3306/database_name"
 | Railway | Dashboard → Variables |
 | Hostinger | `.env.local` file via SSH |
 
-##.htaccess: Apache URL Routing
+## .htaccess: Apache URL Routing
 Symfony uses a single entry point (index.php). Apache needs instructions:
 ```
 Apache<IfModule mod_rewrite.c>
@@ -482,7 +486,8 @@ Why the symlink?
 
 ## Full Deployment Checklist
 
-```# 1. SSH into server
+```bash
+# 1. SSH into server
 ssh -p PORT user@domain.com
 
 # 2. Navigate to domain folder
@@ -522,7 +527,7 @@ php bin/console doctrine:migrations:migrate --no-interaction
 ```
 
 ## Updates Workflow
-```
+```bash 
 # After pushing changes to GitHub:
 ssh -p PORT user@domain.com
 cd ~/domains/bigevent.fun
@@ -537,24 +542,24 @@ Problem: 500 error, no details shown
 Solutions:
 1. Check if database works:
 
-```
+```bash
 php bin/console doctrine:query:sql "SELECT 1" --env=prod
 ```
 
 2. Check routes:
 
-```
+``` bash
 php bin/console router:match /events/ --env=prod
 ```
 
 3. Check logs:
 
-```
+```bash
 cat var/log/prod.log
 ```
 
 4. Temporary debug file:
-```
+```php
 <?php
    // public/debug.php
    ini_set('display_errors', 1);
@@ -566,7 +571,7 @@ cat var/log/prod.log
    $response->send();
 ```
 Delete debug files when done:
-```
+```bash
 rm public/debug.php public/test.php
 ```
 ## Django/Heroku vs Symfony/Hostinger
@@ -580,7 +585,7 @@ rm public/debug.php public/test.php
 | Logs | `heroku logs --tail` | `cat var/log/prod.log` |
 | Process file | `Procfile` | `.htaccess` |
 
-## Key Takeaways
+##  Summary
 
 1. SSH unlocks everything — No more FTP dragging. Git + SSH = professional workflow.
 2. Environment separation — .env for defaults, .env.local for secrets. Never commit secrets.
