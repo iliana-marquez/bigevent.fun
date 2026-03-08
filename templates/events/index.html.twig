@@ -13,8 +13,6 @@
 
 {% block body %}
 
-	{% include 'components/navbar.html.twig' %}
-
 	<h1 id="events-title" style="color: #ff19be; text-align: center;">
         {% if category is defined and category %}
             {{ category|upper }} EVENTS
@@ -27,5 +25,4 @@
         {% include 'events/_event_grid.html.twig' %}
 	</div>
 
-{% include 'components/footer.html.twig' %}
 {% endblock %}

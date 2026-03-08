@@ -5,8 +5,6 @@
 
 {% block body %}
 
-	{% include 'components/navbar.html.twig' %}
-
 	<div class="myForm">
 		<div class="formContainer">
 			<h1 style="text-align: center">CREATE NEW EVENT</h1>
@@ -15,7 +13,5 @@
 			<a class="myButton" href="{{ path('app_events_index') }}">back to events</a>
 		</div>
 	</div>
-
-	{% include 'components/footer.html.twig' %}
 
 {% endblock %}
