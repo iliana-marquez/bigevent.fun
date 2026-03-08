@@ -1,7 +1,10 @@
 body {
     background: linear-gradient(#272727, #737373) !important;
     min-height: 100vh;
-        
+    text-shadow:
+    0 2px 4px rgba(0,0,0,0.8),
+    0 0 10px rgba(0,0,0,0.6),
+    0 0 20px rgba(0,0,0,0.4);
 }
 
 /* NAVBAR ADAPT */
@@ -145,6 +148,10 @@ body {
     margin-top: 0.3rem;
     margin-bottom: 0.3rem;
     text-decoration: none;
+    text-shadow:
+    0 2px 4px rgba(0,0,0,0.8),
+    0 0 10px rgba(0,0,0,0.6),
+    0 0 20px rgba(0,0,0,0.4);
 }
 
 .myButton:hover{
