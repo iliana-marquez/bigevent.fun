@@ -5,46 +5,8 @@ body {
 }
 
 /* NAVBAR ADAPT */
-.navbar-toggler {
-    background-color: #fcf5fa !important;
-}
-
-.navbar-toggler-icon {
-    background-image: none;
-    width: 24px;
-    height: 24px;
-    border: 1px solid #fcf5fa;
-}
-
-.navbar-toggler-icon::before {
-    content: '';
-    display: block;
-    width: 24px;
-    height: 2px;
-    background-color: #fcf5fa;
-    position: absolute;
-    top: 50%;
-    left: 0;
-    transform: translateY(-50%);
-}
-
-.navbar-toggler-icon::after {
-    content: '';
-    display: block;
-    width: 24px;
-    height: 2px;
-    background-color: #fcf5fa;
-    position: absolute;
-    top: calc(50% + 6px);
-    left: 0;
-}
-
-.navbar-toggler.collapsed .navbar-toggler-icon::before {
-    transform: translateY(-6px) rotate(45deg);
-}
-
-.navbar-toggler.collapsed .navbar-toggler-icon::after {
-    transform: translateY(-6px) rotate(-45deg);
+.dropdown-menu {
+  position: absolute !important;
 }
 
 
