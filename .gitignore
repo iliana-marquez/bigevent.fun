@@ -9,6 +9,8 @@ compose.yaml
 /vendor/
 var/cache/
 var/log/
+/public/assets/
+/assets/vendor/
 
 # IDEs
 .idea/
