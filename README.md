@@ -528,14 +528,29 @@ php bin/console doctrine:migrations:migrate --no-interaction
 
 ## Updates Workflow
 ```bash 
-# After pushing changes to GitHub:
+# 1.GitHub 
+git add .
+git commit -m "chore: description"
+git push
+
+# 2.SERVER
 ssh -p PORT user@domain.com
 cd ~/domains/bigevent.fun
 git pull
 composer install --no-dev --optimize-autoloader
 php bin/console cache:clear --env=prod
 php bin/console asset-map:compile
+
 ```
+
+**Commands based on what changed**
+| Change Type | Server Commands |
+|-------------|-----------------|
+| PHP / Twig only | `php bin/console cache:clear --env=prod` |
+| CSS / JS | `php bin/console asset-map:compile` + `cache:clear` |
+| New packages | `composer install --no-dev` + `cache:clear` |
+| Database schema | `php bin/console doctrine:migrations:migrate` + `cache:clear` |
+| Everything | `composer install --no-dev` + `asset-map:compile` + `cache:clear` |
 
 ## Debugging Production Errors
 Problem: 500 error, no details shown
