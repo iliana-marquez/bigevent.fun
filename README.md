@@ -17,18 +17,12 @@ Search & Filter
 - Universal Search — Search works from any page with intelligent redirect fallback
 
 
-#### Main purpose:
+## Project Goal: Identify similarities between **Symfony (PHP)** and **Django (Python)**
+
 
 This project was refactored to revisit Symfony and PHP after focusing primarily on Python and Django development, to understand the transferable architectural concepts between backend frameworks and to explore more deeply the core principles of object-oriented programming (OOP).
 
 Modeling application data as objects and delegating database interactions to an ORM (Doctrine), demonstrate how modern frameworks can build robust architectures while maintaining clear separation of concerns and reusable components, seamlessly handling complex SQL operations in the background.
-
-## Backend Architecture Notes
-
-### Understanding the similarities between **Symfony (PHP)** and **Django (Python)**
-
-This project was originally built using **Symfony**, a modern PHP backend framework.
-Many backend concepts used here are **very similar to Django**, a popular Python framework.
 
 This document explains the **core architectural similarities** between the two frameworks so developers familiar with one can quickly understand the other.
 
@@ -316,8 +310,9 @@ Although Symfony and Django use different programming languages, they share **th
 Understanding one framework makes it **much easier to learn the other**.
 
 ---
+# Project Learning Takeaways:
 
-Takeaway: Turbo + Search Debugging
+## 1. Turbo + Search Debugging
 
 Issue 1: Bootstrap Dropdowns Break After Navigation
 Context: Symfony 6.3+ bundles Turbo by default. Turbo intercepts clicks and swaps <body> via AJAX for SPA-like speed. But Bootstrap initializes components on DOMContentLoaded, which only fires once AND not after Turbo swaps content.
@@ -363,3 +358,233 @@ if (queryParam) {
     }
 }
 ````
+
+## 2. Deployment
+
+### SSH Workflow: Direct Server Access
+
+Before (slow):
+
+`Edit locally → Upload via FTP/Dashboard → Test → Repeat`
+
+
+After (fast):
+```
+# Local: commit and push
+Local: commit and push
+git add .
+git commit -m "fix: something"
+git push
+
+# Server: SSH in and pull
+ssh -p PORT user@bigevent.fun
+cd ~/domains/bigevent.fun
+git pull
+composer install --no-dev
+php bin/console cache:clear --env=prod
+```
+
+Key commands:
+```
+bashssh -p 65002 username@domain.com  # Connect
+pwd                                   # Where am I?
+ls -la                                # What's here?
+cd ~/domains/bigevent.fun            # Navigate
+nano filename                        # Edit file
+cat filename                         # View file
+rm -rf folder/                       # Delete folder
+ln -s target link                    # Create symlink
+```
+
+---
+
+### Environment Files
+
+| File | Purpose | In Git? |
+|------|---------|---------|
+| `.env` | Base defaults, safe values only | ✅ Yes |
+| `.env.local` | Real secrets, server-specific | ❌ Never |
+
+**Why both?**
+
+Symfony loads `.env` first, then `.env.local` overrides it. This allows:
+- Safe defaults in version control
+- Real secrets only on server
+
+**Your `.env`:**
+```
+APP_ENV=prod
+```
+
+**Your `.env.local` (server only):**
+```
+APP_ENV=prod
+APP_SECRET=your_32_char_secret
+DATABASE_URL="mysql://user:password@localhost:3306/database_name"
+````
+
+### Hostinger vs Heroku: 
+
+| Platform | Where secrets go |
+|----------|------------------|
+| Heroku | Dashboard → Config Vars |
+| Railway | Dashboard → Variables |
+| Hostinger | `.env.local` file via SSH |
+
+##.htaccess: Apache URL Routing
+Symfony uses a single entry point (index.php). Apache needs instructions:
+```
+Apache<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Redirect homepage to /events/
+    RewriteRule ^$ /events/ [R=301,L]
+    
+    # If file exists, serve it directly (CSS, JS, images)
+    RewriteCond %{REQUEST_FILENAME} !-f
+    
+    # Otherwise, send everything to index.php
+    RewriteRule ^(.*)$ index.php [QSA,L]
+</IfModule>
+```
+
+**What this does:**
+- `bigevent.fun/` → redirects to `/events/`
+- `bigevent.fun/images/logo.svg` → serves the file directly
+- `bigevent.fun/events/` → routes through Symfony
+
+**Django comparison:** Django uses `urls.py` + web server config (Gunicorn/nginx). Same concept, different syntax.
+
+---
+
+### Folder Structure on Hostinger
+```
+~/domains/
+├── bigevent.fun/
+│   ├── public/              ← Symfony's web root
+│   │   ├── index.php
+│   │   ├── .htaccess
+│   │   └── images/
+│   ├── public_html -> public  ← Symlink (Hostinger looks here)
+│   ├── src/
+│   ├── templates/
+│   ├── vendor/
+│   ├── var/
+│   ├── .env
+│   └── .env.local           ← Secrets (not in git)
+```
+
+Why the symlink?
+- Hostinger expects public_html/
+- Symfony uses public/
+- Symlink bridges both: public_html -> public
+
+
+## Full Deployment Checklist
+
+```# 1. SSH into server
+ssh -p PORT user@domain.com
+
+# 2. Navigate to domain folder
+cd ~/domains/bigevent.fun
+
+# 3. Clone repo (first time only)
+git clone https://github.com/user/repo.git .
+
+# 4. Create symlink (first time only)
+ln -s public public_html
+
+# 5. Create .env.local with secrets
+nano .env.local
+# APP_ENV=prod
+# APP_SECRET=xxx
+# DATABASE_URL="mysql://user:pass@localhost:3306/dbname"
+
+# 6. Create base .env
+nano .env
+# APP_ENV=prod
+
+# 7. Install dependencies (no dev packages)
+composer install --no-dev --optimize-autoloader
+
+# 8. Create .htaccess
+nano public/.htaccess
+
+# 9. Set permissions
+chmod -R 775 var
+
+# 10. Clear cache and compile assets
+php bin/console cache:clear --env=prod
+php bin/console asset-map:compile
+
+# 11. Run migrations (if needed)
+php bin/console doctrine:migrations:migrate --no-interaction
+```
+
+## Updates Workflow
+```
+# After pushing changes to GitHub:
+ssh -p PORT user@domain.com
+cd ~/domains/bigevent.fun
+git pull
+composer install --no-dev --optimize-autoloader
+php bin/console cache:clear --env=prod
+php bin/console asset-map:compile
+```
+
+## Debugging Production Errors
+Problem: 500 error, no details shown
+Solutions:
+1. Check if database works:
+
+```
+php bin/console doctrine:query:sql "SELECT 1" --env=prod
+```
+
+2. Check routes:
+
+```
+php bin/console router:match /events/ --env=prod
+```
+
+3. Check logs:
+
+```
+cat var/log/prod.log
+```
+
+4. Temporary debug file:
+```
+<?php
+   // public/debug.php
+   ini_set('display_errors', 1);
+   error_reporting(E_ALL);
+   require dirname(__DIR__).'/vendor/autoload.php';
+   $kernel = new App\Kernel('prod', false);
+   $request = Symfony\Component\HttpFoundation\Request::createFromGlobals();
+   $response = $kernel->handle($request);
+   $response->send();
+```
+Delete debug files when done:
+```
+rm public/debug.php public/test.php
+```
+## Django/Heroku vs Symfony/Hostinger
+| Step | Django + Heroku | Symfony + Hostinger |
+|------|-----------------|---------------------|
+| Push code | `git push heroku main` | `git push` + SSH + `git pull` |
+| Env vars | `heroku config:set KEY=val` | `.env.local` file |
+| Install | Auto (detects requirements.txt) | `composer install --no-dev` |
+| Static files | `collectstatic` | `asset-map:compile` |
+| Migrations | `heroku run python manage.py migrate` | `php bin/console doctrine:migrations:migrate` |
+| Logs | `heroku logs --tail` | `cat var/log/prod.log` |
+| Process file | `Procfile` | `.htaccess` |
+
+## Key Takeaways
+
+1. SSH unlocks everything — No more FTP dragging. Git + SSH = professional workflow.
+2. Environment separation — .env for defaults, .env.local for secrets. Never commit secrets.
+3. Always cache:clear --env=prod after changes. Most "broken" deployments are cache issues.
+4. Symlinks bridge conventions — When framework expects X and host expects Y, symlink them.
+5. Debug systematically — Test database, test routes, check logs, create debug file. Isolate the problem.
+6. Production = --no-dev — Don't install dev dependencies. DebugBundle broke my prod because dev bundles weren't installed.
