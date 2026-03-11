@@ -2,7 +2,7 @@
 A Symfony web application for managing entertainment and performing arts events.
 
 ![Event Details Screenshot](/public/images/event-details.png)
-
+[Live Demo](https://ilianamarquez.com/petmatch/)
 
 #### Key Features:
 
